@@ -1,0 +1,1 @@
+IvyMailer.HTTP_CONNECTION_TYPE

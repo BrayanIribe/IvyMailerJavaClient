@@ -32,10 +32,4 @@ public class Client {
         this.mails = new Vector<ClientMail>();
         this.mails.add(e);
     }
-    
-    public JSONObject GetJson() {
-        JSONObject model = new JSONObject();
-        model.put("id", id);
-        return model;
-    }
 }

@@ -16,6 +16,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -27,44 +29,26 @@ public class MainUI extends javax.swing.JFrame {
     private Api api;
     private SettingsResponse settings;
     private GetClientsResponse clients;
+    private MainUIController controller;
 
     /**
      * Creates new form NewJFrame
      */
     public MainUI() {
         initComponents();
-        token.setText("eCvxVMCE9xTpapVDjknfU2TkYkeQeCbq6o6");
-        try {
-            api = new Api();
-            api.setToken(token.getText());
-            settings = api.getSettings();
-            this.SearchAction();
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
-            JOptionPane.showMessageDialog(null, e, "Server Error", JOptionPane.ERROR_MESSAGE);
-        }
+        controller = new MainUIController(this);
+    }
+    
+    public JTextField getToken(){
+        return this.token;
+    }
+    
+    public JTable getClientsTable(){
+        return this.clientsTable;
     }
 
     public void SearchAction() {
-        try {
-            clients = api.getClients(null, 1);
-            DefaultTableModel model = (DefaultTableModel) this.clientsTable.getModel();
-            model.setRowCount(0);
-            if (clients.items.length > 0) {
-                for (Client client : clients.items) {
-                    model.addRow(new String[]{
-                        client.id,
-                        client.name,
-                        client.group_name,
-                        client.phone,
-                        client.mails.isEmpty() ? null : client.mails.get(0).getData()
-                    });
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
-            JOptionPane.showMessageDialog(null, e, "Server Error", JOptionPane.ERROR_MESSAGE);
-        }
+        this.controller.SearchAction();
     }
 
     /**
@@ -204,14 +188,7 @@ public class MainUI extends javax.swing.JFrame {
 
     private void TestButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TestButtonMouseClicked
         // TODO add your handling code here:
-        TokenResponse tokenInfo;
-        // 1) Check token
-        api.setToken(token.getText());
-        try {
-            tokenInfo = api.checkToken();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e, "Server Error", JOptionPane.ERROR_MESSAGE);
-        }
+        controller.CheckTokenAction();
     }//GEN-LAST:event_TestButtonMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
